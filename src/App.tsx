@@ -1,26 +1,42 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
+import { nanoid } from "nanoid";
+let data = require("./users.json");
 
-function App() {
+interface User {
+  name: string;
+  age?: number;
+  email: string;
+  id: number;
+  job?: string;
+}
+
+let billy: User = {
+  name: "Billy",
+  email: "billy@gmail.com",
+  age: 23,
+  id: 1,
+  job: "cleaner",
+};
+
+export default function App() {
+  const [dataBase, setDataBase] = useState(data);
+
+  let list = dataBase.map((item: any) => {
+    return <div key={nanoid()}>{item.name}</div>;
+  });
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {list}
+      <button
+        onClick={() => {
+          let res = [...dataBase, billy];
+          setDataBase(res);
+        }}
+      >
+        action
+      </button>
     </div>
   );
 }
-
-export default App;
