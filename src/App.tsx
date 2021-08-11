@@ -1,29 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import { nanoid } from "nanoid";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 let data = require("./users.json");
 
-interface User {
-  name: string;
-  age?: number;
-  email: string;
-  id: number;
-  job?: string;
-}
-
-let billy: User = {
-  name: "Billy",
-  email: "billy@gmail.com",
-  age: 23,
-  id: 1,
-  job: "cleaner",
-};
-
 export default function App() {
-  const [dataBase, setDataBase] = useState(data);
+  useEffect(() => {
+    // localStorage.clear();
+    for (const it of data) {
+      localStorage.setItem(
+        `${it.id}`,
+        JSON.stringify({ name: it.name, age: it.age, id: it.id })
+      );
+    }
+  }, []);
 
-  let list = dataBase.map((item: any) => {
+  let items = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    let key = localStorage.key(i);
+    if (key !== null) {
+      items.push(JSON.parse(`${localStorage.getItem(key)}`));
+    }
+  }
+
+  let [dataBase, setDataBase] = useState(items);
+
+  let list = dataBase.map((item) => {
     return <div key={nanoid()}>{item.name}</div>;
   });
 
@@ -31,33 +33,39 @@ export default function App() {
   const About = () => <h2>Контакты</h2>;
   const Users = () => <h2>Пользователи</h2>;
 
+  function handleAdd() {
+    localStorage.setItem(
+      `${nanoid()}`,
+      JSON.stringify({ name: "name", age: 23, id: 45 })
+    );
+    handleShow()
+  }
+
+  function handleShow() {
+    let items = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      let key = localStorage.key(i);
+      if (key !== null) {
+        items.push(JSON.parse(`${localStorage.getItem(key)}`));
+      }
+    }
+    setDataBase(items);
+  }
+
   return (
     <div className="App">
       <Router>
         <header>
           <nav>
-            <ul>
-              <li>
-                <Link to="/">Главная</Link>
-              </li>
-              <li>
-                <Link to="/about">Контакты</Link>
-              </li>
-              <li>
-                <Link to="/users">Пользователи</Link>
-              </li>
-            </ul>
+            <Link to="/">Главная</Link>
+            {" | "}
+            <Link to="/about">Контакты</Link>
+            {" | "}
+            <Link to="/users">Пользователи</Link>
           </nav>
         </header>
         {list}
-        <button
-          onClick={() => {
-            let res = [...dataBase, billy];
-            setDataBase(res);
-          }}
-        >
-          action
-        </button>
+        <button onClick={handleAdd}>add item</button>
         <main>
           <Switch>
             <Route path="/about">

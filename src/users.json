@@ -1,5 +1,5 @@
 [
-  { "name": "Billy", "age": 23, "job": "cleaner" },
-  { "name": "Jeccy", "age": 56, "job": "meneger" },
-  { "name": "John", "age": 15, "job": "director" }
+  { "name": "Billy", "age": 23, "id": 1 },
+  { "name": "Jeccy", "age": 56, "id": 2 },
+  { "name": "John", "age": 15, "id": 3 }
 ]
