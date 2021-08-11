@@ -15,7 +15,8 @@ export default function App() {
     }
   }, []);
 
-  let items = [];
+  let items: any = [];
+
   for (let i = 0; i < localStorage.length; i++) {
     let key = localStorage.key(i);
     if (key !== null) {
@@ -25,7 +26,7 @@ export default function App() {
 
   let [dataBase, setDataBase] = useState(items);
 
-  let list = dataBase.map((item) => {
+  let list = dataBase.map((item: any) => {
     return <div key={nanoid()}>{item.name}</div>;
   });
 
@@ -38,7 +39,7 @@ export default function App() {
       `${nanoid()}`,
       JSON.stringify({ name: "name", age: 23, id: 45 })
     );
-    handleShow()
+    handleShow();
   }
 
   function handleShow() {
@@ -50,6 +51,11 @@ export default function App() {
       }
     }
     setDataBase(items);
+  }
+
+  function clearStorage() {
+    localStorage.clear();
+    handleShow();
   }
 
   return (
@@ -66,6 +72,7 @@ export default function App() {
         </header>
         {list}
         <button onClick={handleAdd}>add item</button>
+        <button onClick={clearStorage}>clear</button>
         <main>
           <Switch>
             <Route path="/about">
